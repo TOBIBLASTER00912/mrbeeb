@@ -1,11 +1,9 @@
 {
     "minecraft": {
       "server_ip": "simpcraft.com",
-      "username": "bestplayever8@gmail.com,",
-      "auth": "microsoft"
+      "username": "BlasterBotGG"
     },
     "discord": {
-      "webhook_url": "https://discord.com/api/webhooks/1136298141117861938/AcdUeQC3TDEG-Y7DYa88h_Ti6knet_RB44rRPBdo9R2p44OvJ0dPXryS-bmMe4JZAQNB"
-    }
-  }
-  
+      "main_webhook": "https://discord.com/api/webhooks/1136298141117861938/AcdUeQC3TDEG-Y7DYa88h_Ti6knet_RB44rRPBdo9R2p44OvJ0dPXryS-bmMe4JZAQNB",
+      "server_message_webhook": "https://discord.com/api/webhooks/1137684191878844427/oR6Y2MAvYQPSsnkEhppLNt0-2XunvYKJ4-VE9mjgxCp5TVtjMZn_bR5pnSBe90YofMS4"
+  }}

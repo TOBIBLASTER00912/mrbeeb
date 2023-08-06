@@ -1,11 +1,13 @@
 const mineflayer = require('mineflayer');
-const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
+const { pathfinder } = require('mineflayer-pathfinder');
 const config = require('./config.json');
 const { format } = require('date-fns');
+const axios = require('axios');
 
 let bot = null;
 let botended = '';
-console.clear()
+
+console.clear();
 
 function createBot() {
   bot = mineflayer.createBot({
@@ -19,7 +21,8 @@ function createBot() {
   bot.loadPlugin(pathfinder);
 
   bot.once('spawn', () => {
-    console.log('Minecraft bot is ready!');
+    console.log(`Bot Spawned at X: ${bot.entity.position.x}, Y: ${bot.entity.position.y}, Z: ${bot.entity.position.z}`);
+    console.log('____________________________________CHAT________________________________________');
   });
 
   bot.on('chat', (username, message) => {
@@ -28,36 +31,33 @@ function createBot() {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString();
     const formattedTime = currentDate.toLocaleTimeString();
-    
-    const content = `**___` + formattedDate + ` | ` + formattedTime + `___**` + ` ${username}: ${message}`;
-    sendToDiscordWebhook(content);
+
+    const content = `**___${formattedDate} | ${formattedTime}___** ${username}: ${message}`;
+    sendToDiscordWebhook(config.discord.main_webhook, content);
     console.log(content);
   });
 
   bot.on('kicked', (reason, loggedIn) => {
     console.log(`Bot was kicked for reason: ${reason}`);
     botended = `Bot Kicked: ${reason} Reconnecting...`;
-    setTimeout(createBot, 5000);
+    setTimeout(createBot, 15000);
   });
 
   bot.once('end', () => {
     console.log('Minecraft bot disconnected. Attempting to reconnect...');
-    botended = `Bot Disconnected (probably AFK) Reconnecting...`;
     setTimeout(createBot, 15000);
   });
 }
 
-function sendToDiscordWebhook(message) {
-  const axios = require('axios');
-  axios.post(config.discord.webhook_url, {
-    content: message + '\n' + botended,
-  })
-  .then(() => {
-    console.log(' ');
-  })
-  .catch((error) => {
+async function sendToDiscordWebhook(webhookUrl, message) {
+  try {
+    await axios.post(webhookUrl, {
+      content: message,
+    });
+    console.log('Message sent to Discord successfully.');
+  } catch (error) {
     console.error('Failed to send message to Discord:', error);
-  });
+  }
 }
 
 createBot();
